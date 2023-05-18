@@ -15,8 +15,24 @@ void GreedySolver::setInstance(TaxiAssignmentInstance &instance) {
 }
 
 void GreedySolver::solve() {
-
-
+    auto start_time = std::chrono::high_resolution_clock::now();
+    int cantidad=this->_instance.n;
+    for (int j=0; j<cantidad; j++){
+        int conductor=0;
+        double minimo=100000;
+        for (int i=0; i<cantidad; i++){
+            if(minimo>this->_instance.dist[i][j] && _solution.isTaxiAssigned(i)==false){
+                minimo=this->_instance.dist[i][j];
+                int conductor=i;
+            }
+        }
+        this->_objective_value=+minimo;
+        this->_solution.assign(conductor,j);
+    }
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    this->_solution_time = elapsed_time.count();
+    this->_solution_status = 1;
 }
 
 double GreedySolver::getObjectiveValue() const {
